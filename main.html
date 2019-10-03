@@ -17,7 +17,7 @@
     <body>
         <br />
         <div class="buttons">
-            <select onchange="changeVertices(this.options[this.selectedIndex].value)">
+            <select id="sides" onchange="reset(this.options[this.selectedIndex].value)">
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
@@ -33,8 +33,10 @@
                 <option value="15">15</option>
                 <option value="16">16</option>
             </select>
-            <button onclick="createPoints(100000)">Create 100,000 Points</button>
-            <button onclick="clear_()">Clear</button>
+            <button onclick="createPoints(100)">Create 100</button>
+            <button onclick="createPoints(1000)">Create 1,000</button>
+            <button onclick="createPoints(100000)">Create 100,000</button>
+            <button onclick="reset(d3.select('#sides').node().value)">Clear</button>
         </div>
         
         <script>
@@ -97,8 +99,6 @@
                 }
                 update()
             }
-
-            const changeVertices = n => reset(n)
 
             const clear_ = () => { reset() }
 
