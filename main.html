@@ -62,8 +62,7 @@
             const update = () => {
                 svg.selectAll('circle')
                 .data(dataset)
-                .enter()
-                .append('circle')
+                .join('circle')
                     .attr('cx', d => xScale(d[0]))
                     .attr('cy', d => yScale(d[1]))
                     .attr('r', '.01em')
@@ -76,9 +75,9 @@
                 dataset = sierpinski.points
 
                 xMin = d3.min(dataset, d => d[0])
-                xMax = d3.max(dataset, d => d[0])
+                xMax = 110 //d3.max(dataset, d => d[0])
                 yMin = d3.min(dataset, d => d[1])
-                yMax = d3.max(dataset, d => d[1])
+                yMax = 110 //d3.max(dataset, d => d[1])
                 xScale = d3.scaleLinear().domain([xMin, xMax]).range([margin.left, width - margin.right])
                 yScale = d3.scaleLinear().domain([yMin, yMax]).range([height - margin.bottom, margin.top])
 
