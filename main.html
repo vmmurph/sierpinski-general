@@ -7,7 +7,7 @@
         <title>Sierpinski</title>
 
         <style>
-            body {background-color: black;}
+            body { background-color: black }
             .buttons {
                 margin-left: 42px;
                 margin-bottom: 20px;
@@ -17,13 +17,34 @@
     <body>
         <br />
         <div class="buttons">
-            <button onclick="createNewPoint()">Create 1 Point</button>
+            <select id="sides" onchange="reset(this.options[this.selectedIndex].value)">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+            </select>
             <button onclick="createPoints(100)">Create 100</button>
-            <button onclick="createPoints(1000)">Create 1000</button>
-            <button onclick="clear_()">Clear</button>
+            <button onclick="createPoints(1000)">Create 1,000</button>
+            <button onclick="createPoints(100000)">Create 100,000</button>
+            <button onclick="reset(d3.select('#sides').node().value)">Clear</button>
         </div>
         
         <script>
+            let sierpinski, dataset, xMin, xMax, yMin, yMax, xScale, yScale
+
+            /* canvas setup */
+            const height = 600
+            const width = 600
             const margin = {
                 top: 5,
                 right: 5,
@@ -31,45 +52,57 @@
                 left: 20
             }
 
-            const height = 500
-            const width = 800
             const svg = d3.select('body')
                 .append('svg')
                     .attr('height', height)
                     .attr('width', width)
                     .attr('id', 'canvas')
 
-            const dataset = points
-
-            const xScale = d3.scaleLinear().domain([0, 100]).range([margin.left, width - margin.right])
-            const yScale = d3.scaleLinear().domain([0, 87]).range([height - margin.bottom, margin.top])
-
+            /* function to update graphics */
             const update = () => {
                 svg.selectAll('circle')
                 .data(dataset)
-                .enter()
-                .append('circle')
-                    .attr('cx', d => xScale(d.x))
-                    .attr('cy', d => yScale(d.y))
-                    .attr('r', 1)
+                .join('circle')
+                    .attr('cx', d => xScale(d[0]))
+                    .attr('cy', d => yScale(d[1]))
+                    .attr('r', '.01em')
                     .attr('fill', 'white')
             }
             
-            update()
+            /* function to reinstantiate everything with a given number of vertices */
+            const reset = (n = 3) => {
+                sierpinski = new Sierpinski(n)
+                dataset = sierpinski.points
+
+                xMin = d3.min(dataset, d => d[0])
+                xMax = 110 //d3.max(dataset, d => d[0])
+                yMin = d3.min(dataset, d => d[1])
+                yMax = 110 //d3.max(dataset, d => d[1])
+                xScale = d3.scaleLinear().domain([xMin, xMax]).range([margin.left, width - margin.right])
+                yScale = d3.scaleLinear().domain([yMin, yMax]).range([height - margin.bottom, margin.top])
+
+                d3.selectAll('circle').remove()
+                update()
+            }
+
+            reset()
 
             const createNewPoint = () => {
-                pushRandomPoint()
+                sierpinski.pushRandomPoint()
                 update()
             }
 
             const createPoints = num => {
+                const start = Date.now()
                 for (let i = 0; i < num; i++) {
-                    pushRandomPoint()
+                    sierpinski.pushRandomPoint()
                 }
                 update()
+                const end = Date.now()
+                console.log(`Ran in ${(end - start) / 1000} seconds`)
             }
 
-            const clear_ = () => { location.reload() }
+            const clear_ = () => { reset() }
 
         </script>
     </body>
