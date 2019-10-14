@@ -7,7 +7,7 @@
         <title>Sierpinski</title>
 
         <style>
-            body { background-color: black }
+            body { background-color: #EADBC4 }
             .buttons {
                 margin-left: 42px;
                 margin-bottom: 20px;
@@ -44,7 +44,7 @@
 
             /* canvas setup */
             const height = 600
-            const width = 600
+            const width = 600   
             const margin = {
                 top: 5,
                 right: 5,
@@ -66,7 +66,7 @@
                     .attr('cx', d => xScale(d[0]))
                     .attr('cy', d => yScale(d[1]))
                     .attr('r', '.01em')
-                    .attr('fill', 'white')
+                    .attr('fill', 'black')
             }
             
             /* function to reinstantiate everything with a given number of vertices */
@@ -84,7 +84,7 @@
                 d3.selectAll('circle').remove()
                 update()
             }
-
+        
             reset()
 
             const createNewPoint = () => {
